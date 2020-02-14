@@ -3,9 +3,11 @@ Implementation Back End System with Node.js using Koa web framework and MongoDB
 To connect Koa and MongoDB, use mongoose ODM(Object Data Mapping) library.
 
 
-Extra files
+#Extra files
+
+
+ .eslintrc.json
 -------------------------------
-# .eslintrc.json
 
 {
     "env": {
@@ -36,8 +38,8 @@ Extra files
     }
 }
     
-# package.json
-
+ package.json
+-------------------------------
 {
   "name": "blog-backend",
   "version": "1.0.0",
@@ -64,7 +66,8 @@ Extra files
 
   
   
-# .prettierrc
+ .prettierrc
+-------------------------------
 
 {
     "singleQuote": true,
@@ -77,7 +80,8 @@ Extra files
 
 
 
-# jsconfig.json
+ jsconfig.json
+-------------------------------
 {
     "compilerOptions": {
         "target": "es6",
@@ -88,7 +92,8 @@ Extra files
 
 
 
-# .env
+.env
+-------------------------------
 PORT = 4000
 MONGO_URL = mongodb://localhost:27017/blog
 
