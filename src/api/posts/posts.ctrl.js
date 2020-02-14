@@ -4,15 +4,33 @@ import Joi from 'joi';
 
 
 const {ObjectId} = mongoose.Types;
-export const checkObjectId = (ctx, next)=>{
+export const getPostById = async (ctx, next)=>{
     const {id} = ctx.params;
     if(!ObjectId.isValid(id)){
         ctx.status = 400;
         return;
     }
-    return next();
+    try{
+        const post = await Post.findById(id);
+        if(!post){
+            ctx.status = 404 ; //Not Found
+            return;
+        }
+        ctx.state.post = post;
+        return next();
+    }catch (e){
+        ctx.throw(500, e);
+    }
 };
 
+export const checkOwnPost = (ctx, next)=>{
+    const {user,post} = ctx.state;
+    if(post.user._id.toString() !== user._id){
+        ctx.status = 403; //forbidden 
+        return;
+    }
+    return next();
+};
 /*
 POST/api/posts
 {
@@ -41,6 +59,7 @@ export const write = async ctx =>{
         title,
         body,
         tags,
+        user: ctx.state.user,
     });
     try{
         await post.save();
@@ -59,20 +78,24 @@ export const list = async ctx =>{
         ctx.status = 400;
         return;
     }
+    const { tag, username } = ctx.query;
+    const query = {
+    ...(username ? { 'user.username': username } : {}),
+    ...(tag ? { tags: tag } : {}),
+  };
+
     try{
-        const posts = await Post.find()
+        const posts = await Post.find(query)
             .sort({_id: -1})
             .limit(5)
             .skip((page-1)*5)
             .exec();
-        ctx.body = posts
-            .map(post => post.toJSON())
-            .map(post => ({
+            ctx.body = posts.map(post => ({
                 ...post,
-                body: 
-                    post.body.length < 200? post.body : `${post.body.slice(0,200)}...`,
-            }));
-    }catch (e){
+                body:
+                  post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`,
+              }));
+        }catch (e){
         ctx.throw(500,e);
     }
 };
@@ -80,19 +103,8 @@ export const list = async ctx =>{
 /* 
 GET/api/posts/:id*/
 
-export const read = async ctx =>{
-    const {id} = ctx.params;
-    try{
-        const post = await Post.findById(id).exec();
-        if(!post){
-            ctx.status = 404;
-            return;
-        }
-        ctx.body = post;
-    }catch (e){
-        ctx.throw(500,e);
-    }
-
+export const read = ctx =>{
+    ctx.body = ctx.state.post;
 };
 
 /**
