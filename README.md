@@ -1,8 +1,46 @@
-# Back-End Programming using Koa web framework and MongoDB 
+# Blog.me
+Simple CRUD blog project
+
+Front-End Programing using React.js, CSS
+------------------------------------------------
+Implementation UI components:
+1. Install Router -> link all pages
+2. Install Redux to control state 
+   -define initalstate, action type
+   -define reducer (combine all reducer if you need)
+   -define store to apply reducer
+   -pass store as props using Provider
+3. Register / Login Authorized Form UI
+   -use Redux to control form state. pass type through props
+   
+Code Structure:
+src 
+    -lib -> set middleware: checkloggedin, publish token
+    -model -> post/user: define each schema for DB, set static method, instance function
+    -api -> post/auth: HTTP Method, define CRUD, index: api.use(post)
+    -index -> export module main, use esm to use 'import'
+    -main -> link page (app.listen -> link port, app.use -> link router.use(api), mongoose -> link mongoDB 
+
+
+
+Back-End Programming using Koa web framework and MongoDB 
+------------------------------------------------------------
 Implementation Back End System with Node.js using Koa web framework and MongoDB
 To connect Koa and MongoDB, use mongoose ODM(Object Data Mapping) library.
+Use Postman program to test own APIs.
 
-
+Code Structure:
+src 
+    -components -> define button, auth form
+    -containers -> define LoginForm, RegisterForm with redux
+    -lib -> set styles (open source)
+    -modules ->  define reducer module (action type, action function, reducer)
+    -pages -> create all pages (LoginPage, RegisterPage, PostListPage, PostPage, WritePage)
+    -index -> create store, BrowserRouter
+    -App -> set route all pages
+    
+    
+    
 # Extra files
 
 
