@@ -48,6 +48,12 @@ const textMap = {
   register: 'Register'
 };
 
+const ErrorMessage = styled.div`
+  color: red;
+  text-align: center;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+`;
 
 const AuthForm=({type, form, onChange, onSubmit})=>{
     const text = textMap[type];
@@ -77,6 +83,7 @@ const AuthForm=({type, form, onChange, onSubmit})=>{
                         onChange={onChange}
                         value={form.passwordConfirm} />
                 )}
+                <ErrorMessage>Error!!</ErrorMessage>
                 <Button cyan fullWidth>{text}</Button>
             </form>
             <Footer>
