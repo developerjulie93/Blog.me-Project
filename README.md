@@ -15,11 +15,13 @@ Implementation UI components:
    
 Code Structure:  
 src   
-    -lib -> set middleware: checkloggedin, publish token  
-    -model -> post/user: define each schema for DB, set static method, instance function  
-    -api -> post/auth: HTTP Method, define CRUD, index: api.use(post)  
-    -index -> export module main, use esm to use 'import'  
-    -main -> link page (app.listen -> link port, app.use -> link router.use(api), mongoose -> link mongoDB   
+    -components -> define button, auth form  
+    -containers -> define LoginForm, RegisterForm with redux  
+    -lib -> set styles (open source), middleware: redux-saga, API: define HTTP Method 
+    -modules ->  define reducer module (action type, action function, reducer)  
+    -pages -> create all pages (LoginPage, RegisterPage, PostListPage, PostPage, WritePage)  
+    -index -> create store, BrowserRouter  
+    -App -> set route all pages  
 
 
 
@@ -31,15 +33,12 @@ Use Postman program to test own APIs.
 
 Code Structure:  
 src   
-    -components -> define button, auth form  
-    -containers -> define LoginForm, RegisterForm with redux  
-    -lib -> set styles (open source)  
-    -modules ->  define reducer module (action type, action function, reducer)  
-    -pages -> create all pages (LoginPage, RegisterPage, PostListPage, PostPage, WritePage)  
-    -index -> create store, BrowserRouter  
-    -App -> set route all pages  
-    
-    
+    -lib -> set middleware: checkloggedin, publish token  
+    -model -> post/user: define each schema for DB, set static method, instance function  
+    -api -> post/auth: HTTP Method, define CRUD, index: api.use(post)  
+    -index -> export module main, use esm to use 'import'  
+    -main -> link page (app.listen -> link port, app.use -> link router.use(api), mongoose -> link mongoDB   
+      
       
 # Extra files
 
