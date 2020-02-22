@@ -42,7 +42,6 @@ const Footer = styled.div`
   }
 `;
 
-
 const textMap = {
   login: 'Login',
   register: 'Register'
@@ -52,10 +51,10 @@ const ErrorMessage = styled.div`
   color: red;
   text-align: center;
   font-size: 0.875rem;
-  margin-top: 1rem;
+  margin-bottom: 1rem;
 `;
 
-const AuthForm=({type, form, onChange, onSubmit})=>{
+const AuthForm=({type, form, onChange, onSubmit, error})=>{
     const text = textMap[type];
     return(
         <AuthFormBlock>
@@ -83,7 +82,7 @@ const AuthForm=({type, form, onChange, onSubmit})=>{
                         onChange={onChange}
                         value={form.passwordConfirm} />
                 )}
-                <ErrorMessage>Error!!</ErrorMessage>
+                {error && <ErrorMessage>{error}</ErrorMessage>}
                 <Button cyan fullWidth>{text}</Button>
             </form>
             <Footer>

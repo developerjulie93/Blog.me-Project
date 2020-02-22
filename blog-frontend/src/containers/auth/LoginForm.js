@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeField, initializeForm, login } from '../../modules/auth';
 import AuthForm from '../../components/auth/AuthForm';
@@ -7,8 +7,9 @@ import {check} from '../../modules/user';
 
 
 const LoginForm=({history})=>{
+    const [error, setError] = useState(null);
     const dispatch = useDispatch();
-    const {form,auth, authError, user } = useSelector(({auth, user}) => ({
+    const {form,auth, authError, user} = useSelector(({auth, user}) => ({
         form: auth.login,
         auth: auth.auth,
         authError: auth.authError,
@@ -36,6 +37,7 @@ const LoginForm=({history})=>{
         if(authError){
             console.log("AuthError");
             console.log(authError);
+            setError('Login Fail');
             return;
         }
         if(auth){
@@ -47,6 +49,11 @@ const LoginForm=({history})=>{
         if(user){
             console.log("This is user");
             history.push('/');
+            try{
+                localStorage.setItem('user',JSON.stringify(user));
+            }catch (e){
+                console.log('localStorage is not working');
+            }
         }
     },[history, user]);
     return(
@@ -55,6 +62,7 @@ const LoginForm=({history})=>{
             form={form}
             onChange={onChange}
             onSubmit={onSubmit}
+            error={error}
         />
     );
 };
