@@ -29,14 +29,14 @@ const QuillWrapper = styled.div`
         left: 0px;
     }
 `;
-const Editor=()=>{
+const Editor=({title, body, onChangeField})=>{
     const quillElement =  useRef(null);
     const quillInstance = useRef(null);
 
     useEffect(()=>{
         quillInstance.current = new Quill(quillElement.current, {
             theme: 'bubble',
-            placeholder: 'Write down what you want...',
+            placeholder: 'What do you think today...',
             modules: {
                 toolbar: [
                     [{header: '1'}, {header: '2'}],
@@ -46,10 +46,29 @@ const Editor=()=>{
                 ],
             },
         });
-    }, []);
+
+        //quill에 text-change 이벤트 핸들러 등록
+        //http://quilljs.com/docs/api/#events
+
+        const quill = quillInstance.current;
+        quill.on('text-change', (delta, oldDelta, source) => {
+            if(source === 'user'){
+                onChangeField({key: 'body', value: quill.root.innerHTML});
+            }
+        });
+    }, [onChangeField]);
+
+    const onChangeTitle = e => {
+        onChangeField({key: 'title', value: e.target.value});
+    };
+
     return(
         <EditorBlock>
-            <TitleInput placeholder='Title'></TitleInput>
+            <TitleInput 
+                placeholder='Title'
+                onChange = {onChangeTitle}
+                value = {title}
+                ></TitleInput>
             <QuillWrapper>
                 <div ref={quillElement}></div>
             </QuillWrapper>
