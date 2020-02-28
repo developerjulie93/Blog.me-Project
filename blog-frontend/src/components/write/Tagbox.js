@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 
@@ -59,7 +59,7 @@ const TagListBlock = styled.div`
 `;
 
 //Using React.memo, rerendering when tag changed
-const TagItem = React.memo(({tag})=><Tag>#{tag}</Tag>);
+const TagItem = React.memo(({tag}) => <Tag>#{tag}</Tag>);
 const TagList = React.memo(({tags}) =>(
     <TagListBlock>
         {tags.map(tag =>(
@@ -67,27 +67,34 @@ const TagList = React.memo(({tags}) =>(
         ))}
     </TagListBlock>
 ));
-const Tagbox=()=>{
+const Tagbox=({onChangeTags, tags})=>{
     const [input, setInput] = useState('');
     const [localTags, setLocalTags] = useState([]);
-
+    //렌더링 성능을 최적화할때 사용, 함수 재사용 할 때 사용(useMemo와 다른점)
+    //두번째 파라미터 값이 변할때마다 새로 렌더링
     const insertTag = useCallback(
         tag => {
             if(!tag) return;
             if(localTags.includes(tag)) return;
-            setLocalTags([...localTags, tag]);
+            const nextTags = [...localTags, tag];
+            setLocalTags(nextTags);
+            onChangeTags(nextTags);
         },
-        [localTags],
-    ); 
+        [localTags,onChangeTags],
+    );
+
     const onRemove = useCallback(
         tag => {
-            setLocalTags(localTags.filter(t => t !== tag));
+            const nextTags = localTags.filter(t => t!==tag);
+            setLocalTags(nextTags);
+            onChangeTags(nextTags);
         },
-        [localTags],
-    ); 
-    const onChange = useCallback(e=>{
+        [localTags, onChangeTags],
+    );
+        const onChange = useCallback(e=>{
         setInput(e.target.value);
     },[]); 
+    
     const onSubmit = useCallback(
         e => {
             e.preventDefault();
@@ -96,6 +103,11 @@ const Tagbox=()=>{
         },
         [input, insertTag],
     ); 
+    //tag 값이 바뀔때마다 새로 렌더링
+    useEffect(()=>{
+        setLocalTags(tags);
+    }, [tags]);
+
     return(
         <TagBoxBlock>
             <h4>Tag</h4>
