@@ -3,13 +3,13 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
 import mongoose from 'mongoose';
-import jwtMiddleware from './lib/jwtMiddleware';
 import api from './api';
+import jwtMiddleware from './lib/jwtMiddleware';
 
 const {PORT, MONGO_URL} = process.env;
 
 mongoose
- .connect(MONGO_URL, {useNewUrlParser: true,useFindAndModify: false})
+ .connect(MONGO_URL, {useNewUrlParser: true})
   .then(()=>{
       console.log('Connected to MongoDB');
   })
