@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { writePost } from '../../modules/write';
+import { writePost, updatePost } from '../../modules/write';
 import WriteActionButtons from '../../components/write/WriteActionButtons';
 import { withRouter } from 'react-router-dom';
 
@@ -8,15 +8,23 @@ import { withRouter } from 'react-router-dom';
 //WriteButton에 대하여 상태관리를 해주는 컨테이너
 const WriteActionButtonsContainer=({history})=>{
     const dispatch = useDispatch();
-    const {title, body, tags, post, postError} = useSelector(({write})=>({
+    const {title, body, tags, post, postError, originalPostId} = useSelector(
+        ({write})=>({
         title: write.title,
         body: write.body,
         tags: write.tags,
         post: write.post,
         postError: write.postError,
-    }));
+        originalPostId: write.originalPostId,
+        }),
+    );
 
     const onPublish=()=>{
+        //postId가 존재하면 포스트를 업데이트로 실행
+        if(originalPostId){
+            dispatch(updatePost({title, body, tags, id: originalPostId}));
+            return;
+        }
         dispatch(
             writePost({
                 title,
@@ -41,7 +49,10 @@ const WriteActionButtonsContainer=({history})=>{
     }, [history, post, postError]);
 
     return(
-        <WriteActionButtons onPublish={onPublish} onCancel={onCancel}>
+        <WriteActionButtons 
+            onPublish={onPublish} 
+            onCancel={onCancel}
+            isEdit={!!originalPostId}>
         </WriteActionButtons>
     );
 };

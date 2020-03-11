@@ -4,6 +4,7 @@ import Responsive from '../common/Responsive';
 import palette from '../../lib/styles/palette';
 import SubInfo from '../common/SubInfo';
 import Tags from '../common/Tags';
+import { Helmet } from 'react-helmet-async';
 
 const PostViewerBlock = styled(Responsive)`
     margin-top: 4rem;
@@ -26,13 +27,13 @@ const PostContent = styled.div`
     color: ${palette.gray[8]};
 `;
 
-const PostViewer=({post, error, loading})=>{
+const PostViewer=({post, error, loading, actionButtons})=>{
     //에러 발생 -> 존재하지 않는 포스트
     if(error){
         if(error.response && error.response.status === 404){
             return <PostViewerBlock><b>No exist post</b></PostViewerBlock>;
         }
-        return <PostViewerBlock>Error Page</PostViewerBlock>;
+        return <PostViewerBlock>Error Page</PostViewerBlock>
     }
     //로딩중이거나 아직 포스트 데이터가 없을 때
     if(loading || !post){
@@ -41,6 +42,9 @@ const PostViewer=({post, error, loading})=>{
     const {title, body, user, publishedDate, tags} = post;
     return(
         <PostViewerBlock>
+            <Helmet>
+                <title>{title} - Blog.me</title>
+            </Helmet>
             <PostHead>
                 <h1>{title}</h1>
                 <SubInfo
@@ -51,6 +55,7 @@ const PostViewer=({post, error, loading})=>{
                 <Tags tags={tags}>
                 </Tags>
             </PostHead>
+            {actionButtons}
             <PostContent dangerouslySetInnerHTML = {{ __html: body}}>
             </PostContent>
         </PostViewerBlock>        
