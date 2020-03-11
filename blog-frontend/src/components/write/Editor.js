@@ -11,6 +11,7 @@ const EditorBlock = styled(Responsive)`
 `;
 const TitleInput = styled.input`
     font-size: 3rem;
+    color: ${palette.gray[8]};
     outline: none;
     padding-bottom: 0.5rem;
     border: none;
@@ -58,6 +59,14 @@ const Editor=({title, body, onChangeField})=>{
         });
     }, [onChangeField]);
 
+    const mounted = useRef(false);
+    useEffect(()=>{
+        if(mounted.current) return;
+        mounted.current = true;
+        quillInstance.current.root.innerHTML = body;
+    }, [body]);
+
+
     const onChangeTitle = e => {
         onChangeField({key: 'title', value: e.target.value});
     };
@@ -65,7 +74,7 @@ const Editor=({title, body, onChangeField})=>{
     return(
         <EditorBlock>
             <TitleInput 
-                placeholder='Title'
+                placeholder = 'Title'
                 onChange = {onChangeTitle}
                 value = {title}
                 ></TitleInput>
